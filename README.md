@@ -1,5 +1,6 @@
 # iot-edge-GPU-sample
 Terraform template to provision an IoT Hub and an virtual IoT Edge device with a GPU. Iot Edge VM deployment is based on the ARM varient found at https://aka.ms/iotedge-vm-deploy and https://github.com/Azure/iotedge-vm-deploy.
+The initial configurations of the VM are done using a `cloud-init` configuration file. 
 
 | Directory        | Info           |
 | -------------    |:-------------:|
