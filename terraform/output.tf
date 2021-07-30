@@ -8,8 +8,13 @@ output "iot_edge_vm_public_ssh" {
   value = module.iot_edge.public_ssh
 }
 
-output "iot_edge_device_connction_string" {
+output "DEVICE_CONNECTION_STRING" {
   value     = module.iot_hub.device_connection_string
+  sensitive = true
+}
+
+output "IOTHUB_CONNECTION_STRING" {
+  value     = module.iot_hub.iothub_connection_string
   sensitive = true
 }
 

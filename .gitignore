@@ -33,3 +33,6 @@ override.tf.json
 .DS_Store
 .ssh
 .env
+# deployment json files
+src/deployments/config/
+src/deployments/config/*.json
