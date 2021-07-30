@@ -15,7 +15,7 @@ resource "random_string" "vm_user_name" {
 }
 
 locals {
-  dns_label_prefix = "${var.resource_prefix}-iot-edge"
+  dns_label_prefix = "t${var.resource_prefix}-iot-edge"
   vm_user_name     = var.vm_user_name != "" ? var.vm_user_name : random_string.vm_user_name.result
 }
 

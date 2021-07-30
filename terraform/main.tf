@@ -24,7 +24,13 @@ resource "azurerm_resource_group" "rg" {
   name     = "${local.resource_prefix}-rg-sense-development"
   location = var.resource_group_location
 }
-
+module "azure-monitor" {
+  source              = "./modules/azure-monitor"
+  resource_prefix     = local.resource_prefix
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = var.resource_group_location
+  retention_in_days   = var.log_analytics_retention_period
+}
 module "iot_hub" {
   source              = "./modules/iot-hub"
   resource_group_name = azurerm_resource_group.rg.name
@@ -43,3 +49,4 @@ module "iot_edge" {
   edge_vm_name             = local.edge_device_name
   device_connection_string = module.iot_hub.device_connection_string
 }
+

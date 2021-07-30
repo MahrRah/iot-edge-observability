@@ -12,3 +12,16 @@ output "iot_edge_device_connction_string" {
   value     = module.iot_hub.device_connection_string
   sensitive = true
 }
+
+output "LOG_ANALYTICS_WORKSPACE_ID" {
+  value = module.azure-monitor.log_analytics_workspace_id
+}
+
+output "LOG_ANALYTICS_WORKSPACE_KEY" {
+  value     = module.azure-monitor.log_analytics_workspace_key
+  sensitive = true
+
+}
+output "IOT_HUB_RESOURCE_ID" {
+  value = module.iot_hub.iot_hub_resource_id
+}
