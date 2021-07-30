@@ -1,14 +1,16 @@
-# iot-edge-GPU-sample
-Terraform template to provision an IoT Hub and an virtual IoT Edge device with a GPU. Iot Edge VM deployment is based on the ARM varient found at https://aka.ms/iotedge-vm-deploy and https://github.com/Azure/iotedge-vm-deploy.
-The initial configurations of the VM are done using a `cloud-init` configuration file. 
+# IoT Egde Observability sample 
 
 | Directory        | Info           |
 | -------------    |:-------------:|
 | terraform        | Contains root terraform skrip and terraform modules to create resources  |
 | scripts          | Contains shell script to register VM as an edge device.       |  
+| src              | Contains source code.       |  
 | .ssh (generated) | Generated dircetory when creating ressources. Contains the private key to access the VM over ssh  |
+| .devcontainer    | Contains devcontainer setup (tbd), requirments.text files etc. |
 
 ## Run sample
+
+### 1. Infrastructure
 
 The following instruction are all done in the directory `terraform`
 
@@ -25,4 +27,7 @@ iot_edge_vm_public_ssh = "ssh -i ../../.ssh/id_rsa <vm-username>@<prefix>-iot-ed
 iot_hub_name = "<prefix>-iot-hub"
 ```
 
-The ssh private key key should also be stored under the generated `.ssh` directory in root.s
+The ssh private key key should also be stored under the generated `.ssh` directory in root.
+
+### 2. Edge Deployment
+
