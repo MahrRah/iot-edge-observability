@@ -24,8 +24,8 @@ resource "azurerm_resource_group" "rg" {
   name     = "${local.resource_prefix}-rg-sense-development"
   location = var.resource_group_location
 }
-module "azure-monitor" {
-  source              = "./modules/azure-monitor"
+module "observability" {
+  source              = "./modules/observability"
   resource_prefix     = local.resource_prefix
   resource_group_name = azurerm_resource_group.rg.name
   location            = var.resource_group_location

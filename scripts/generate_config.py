@@ -11,12 +11,12 @@ from python_terraform import Terraform
 
 FILE_PATH = os.path.abspath(__file__)
 PROJECT_ROOT = Path(FILE_PATH).parents[1]
-DEPLOYMENT_PATH = Path(FILE_PATH).parents[1] /"src/deployments"
+DEPLOYMENT_PATH = Path(FILE_PATH).parents[1] /"src/edge/deployments"
 TARGET_ENV_FILE = DEPLOYMENT_PATH / ".env"
 
 
 def load_config():
-    deployment_folder_path = f"{os.path.dirname(os.path.realpath(__file__))}/../src/deployments/"
+    deployment_folder_path = f"{os.path.dirname(os.path.realpath(__file__))}/../src/edge/deployments/"
     load_dotenv(f"{deployment_folder_path}.env")
 
 

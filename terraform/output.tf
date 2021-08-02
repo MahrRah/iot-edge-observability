@@ -19,11 +19,11 @@ output "IOTHUB_CONNECTION_STRING" {
 }
 
 output "LOG_ANALYTICS_WORKSPACE_ID" {
-  value = module.azure-monitor.log_analytics_workspace_id
+  value = module.observability.log_analytics_workspace_id
 }
 
 output "LOG_ANALYTICS_WORKSPACE_KEY" {
-  value     = module.azure-monitor.log_analytics_workspace_key
+  value     = module.observability.log_analytics_workspace_key
   sensitive = true
 
 }
