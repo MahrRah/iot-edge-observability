@@ -68,8 +68,7 @@ data "azurerm_function_app_host_keys" "example" {
 resource "azurerm_eventgrid_event_subscription" "example" {
   name  = "defaultEventSubscription"
   scope = var.resource_group_id
-  event_delivery_schema = "EventGridSchema"
-  included_event_types  = ["Microsoft.Storage.BlobCreated","Microsoft.Storage.BlobDelete"]
+  included_event_types  = ["Microsoft.Storage.BlobCreated"]
 
 
   storage_queue_endpoint {
