@@ -1,0 +1,21 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "AzureWebJobsStorage": "{{ STORAGE_CONNECTION_STRING }}",
+    "HubConnectionString":"{{ IOTHUB_CONNECTION_STRING }}",
+    "HubResourceId":" {{ IOT_HUB_RESOURCE_ID }}",
+    "DeviceQuery":"SELECT * FROM devices",
+    "StorageConnectionString":"{{ STORAGE_CONNECTION_STRING }}",
+    "ContainerName":"{{ CONTAINER_NAME }}",
+    "WorkspaceId":"{{ LOG_ANALYTICS_WORKSPACE_ID }}",
+    "QueueName":"{{ QUEUE_NAME }}",
+    "WorkspaceKey":"{{ LOG_ANALYTICS_WORKSPACE_KEY }}",
+    "WorkspaceDomainSuffix":"azure.com",
+    "LogType":"iotedgemodulelogs",
+    "EventHubName":"test",
+    "LogsIdRegex": ".*",
+    "HostUrl": "{{ FUNCTION_HOST }}",
+    "HostKey": "{{ FUNCTION_KEY }}"
+  }
+}

@@ -28,6 +28,7 @@ module "observability" {
   source              = "./modules/observability"
   resource_prefix     = local.resource_prefix
   resource_group_name = azurerm_resource_group.rg.name
+  resource_group_id = azurerm_resource_group.rg.id
   location            = var.resource_group_location
   retention_in_days   = var.log_analytics_retention_period
 }

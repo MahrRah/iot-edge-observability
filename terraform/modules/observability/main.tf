@@ -20,12 +20,24 @@ resource "azurerm_storage_account" "example" {
   resource_group_name      = var.resource_group_name
   location                 = var.location
   account_tier             = "Standard"
-  account_replication_type = "GRS"
+  account_replication_type = "LRS"
 
   tags = {
     environment = "staging"
   }
 }
+
+resource "azurerm_storage_container" "example" {
+  name                  = "${var.resource_prefix}-device-logs"
+  storage_account_name  = azurerm_storage_account.example.name
+  container_access_type = "private"
+}
+
+resource "azurerm_storage_queue" "example" {
+  name                 = "test-queue"
+  storage_account_name = azurerm_storage_account.example.name
+}
+
 # App service plan and Function app
 
 resource "azurerm_app_service_plan" "example" {
@@ -46,4 +58,22 @@ resource "azurerm_function_app" "example" {
   app_service_plan_id        = azurerm_app_service_plan.example.id
   storage_account_name       = azurerm_storage_account.example.name
   storage_account_access_key = azurerm_storage_account.example.primary_access_key
+}
+
+data "azurerm_function_app_host_keys" "example" {
+  name                = azurerm_function_app.example.name
+  resource_group_name =  var.resource_group_name
+}
+
+resource "azurerm_eventgrid_event_subscription" "example" {
+  name  = "defaultEventSubscription"
+  scope = var.resource_group_id
+  event_delivery_schema = "EventGridSchema"
+  included_event_types  = ["Microsoft.Storage.BlobCreated","Microsoft.Storage.BlobDelete"]
+
+
+  storage_queue_endpoint {
+    storage_account_id = azurerm_storage_account.example.id
+    queue_name         = azurerm_storage_queue.example.name
+  }
 }
