@@ -8,8 +8,14 @@
           "settings": {
             "minDockerVersion": "v1.25",
             "loggingOptions": "",
-            "registryCredentials": {}
+            "registryCredentials": {
+              "senseci": {
+                "username": "$CONTAINER_REGISTRY_USERNAME",
+                "password": "$CONTAINER_REGISTRY_PASSWORD",
+                "address": "$CONTAINER_REGISTRY_SERVER"
+              }
           }
+        }
         },
         "systemModules": {
           "edgeAgent": {
@@ -25,7 +31,7 @@
             "restartPolicy": "always",
             "settings": {
               "image": "mcr.microsoft.com/azureiotedge-hub:1.1",
-              "createOptions":{
+              "createOptions": {
                 "HostConfig": {
                   "PortBindings": {
                     "5671/tcp": [
@@ -46,7 +52,6 @@
                   }
                 }
               }
-            
             }
           }
         },
@@ -79,11 +84,21 @@
                 "value": "${IOT_HUB_RESOURCE_ID}"
               },
               "MetricsEndpointsCSV": {
-                "value": "${METRICS_ENDPOINT}"
+                "value": "http://edgeHub:9600/metrics,http://edgeAgent:9600/metrics,http://lvaExtension:9600/metrics,http://senseDemoBusinessLogic:9600/metrics"
               }
             },
             "settings": {
               "image": "mcr.microsoft.com/azuremonitor/containerinsights/ciprod:iot-0.1.3.3",
+              "createOptions": {}
+            }
+          },
+          "mock_inference_module": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.mock_inference_module}",
               "createOptions": {}
             }
           }
@@ -94,7 +109,8 @@
       "properties.desired": {
         "schemaVersion": "1.1",
         "routes": {
-          "route": "FROM /messages/* INTO $upstream"
+          "route": "FROM /messages/* INTO $upstream",
+          "mock_inference_moduleToIoTHub": "FROM /messages/modules/mock_inference_module/outputs/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200

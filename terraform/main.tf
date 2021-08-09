@@ -24,6 +24,16 @@ resource "azurerm_resource_group" "rg" {
   name     = "${local.resource_prefix}-rg-sense-development"
   location = var.resource_group_location
 }
+
+resource "azurerm_container_registry" "acr" {
+  name                     = "${local.resource_prefix}acr"
+  resource_group_name      = azurerm_resource_group.rg.name
+  location                 = var.resource_group_location
+  sku                 = "Basic"
+  admin_enabled       = true
+  network_rule_set = []
+}
+
 module "observability" {
   source              = "./modules/observability"
   resource_prefix     = local.resource_prefix

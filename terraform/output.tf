@@ -53,3 +53,16 @@ output "QUEUE_NAME" {
 output "CONTAINER_NAME" {
   value     = module.observability.storage_container_name
 }
+
+output "CONTAINER_REGISTRY_SERVER" {
+  value = azurerm_container_registry.acr.login_server
+}
+
+output "CONTAINER_REGISTRY_USERNAME" {
+  value =  azurerm_container_registry.acr.admin_username
+}
+
+output "CONTAINER_REGISTRY_PASSWORD" {
+  value     =  azurerm_container_registry.acr.admin_password
+  sensitive = true
+}
