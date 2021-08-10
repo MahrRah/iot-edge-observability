@@ -67,7 +67,7 @@ data "azurerm_function_app_host_keys" "example" {
 
 resource "azurerm_eventgrid_event_subscription" "example" {
   name  = "defaultEventSubscription"
-  scope = var.resource_group_id
+  scope = azurerm_storage_account.example.id
   included_event_types  = ["Microsoft.Storage.BlobCreated"]
 
 
