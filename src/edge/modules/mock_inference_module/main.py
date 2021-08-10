@@ -9,16 +9,20 @@ import asyncio
 from six.moves import input
 import threading
 from azure.iot.device.aio import IoTHubModuleClient
-# from azure_monitor import AzureMonitorSpanExporter
-# from opentelemetry import trace
-# from opentelemetry.sdk.trace import TracerProvider
-# from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry import trace, baggage
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from azure.monitor.opentelemetry.exporter import AzureMonitorTraceExporter
+
 
 async def main():
     try:
         if not sys.version >= "3.5.3":
-            raise Exception( "The sample requires python 3.5.3+. Current version of Python: %s" % sys.version )
-        print ( "IoT Hub Client for Python" )
+            raise Exception(
+                "The sample requires python 3.5.3+. Current version of Python: %s"
+                % sys.version
+            )
+        print("IoT Hub Client for Python")
 
         # The client object is used to interact with your Azure IoT hub.
         module_client = IoTHubModuleClient.create_from_edge_environment()
@@ -26,16 +30,36 @@ async def main():
         # connect the client.
         await module_client.connect()
 
+        try:
+            exporter = AzureMonitorTraceExporter.from_connection_string("<connection-string>")
+            trace.set_tracer_provider(TracerProvider())
+            tracer = trace.get_tracer(__name__)
+            span_processor = BatchSpanProcessor(exporter)
+            trace.get_tracer_provider().add_span_processor(span_processor)
+        except Exception as ex:
+            print("Exception:")
+            print(ex)
+
         # define behavior for receiving an input message on input1
         async def input1_listener(module_client):
             while True:
-                input_message = await module_client.receive_message_on_input("input1")  # blocking call
-                print("the data in the message received on input1 was ")
-                print(input_message.data)
-                print("custom properties are")
-                print(input_message.custom_properties)
-                print("forwarding mesage to output1")
-                await module_client.send_message_to_output(input_message, "output1")
+                input_message = await module_client.receive_message_on_input(
+                    "input1"
+                )  # blocking call
+                with tracer.start_as_current_span(name="parent span"):
+                    parent_ctx = baggage.set_baggage("context", "parent")
+                    print("the data in the message received on input1 was ")
+                    print(input_message.data)
+                    print("custom properties are")
+                    print(input_message.custom_properties)
+                    print("forwarding mesage to output1")
+                    print("Send message upstream")
+                    with tracer.start_as_current_span(name="child span", context=parent_ctx) as child_span:
+                        child_ctx = baggage.set_baggage("context", "child")
+                        await module_client.send_message_to_output(
+                            input_message, "output1"
+                        )
+       
 
         # define behavior for halting the application
         def stdin_listener():
@@ -51,22 +75,7 @@ async def main():
         # Schedule task for C2D Listener
         listeners = asyncio.gather(input1_listener(module_client))
 
-        # # trace
-        # trace.set_tracer_provider(TracerProvider())
-        # tracer = trace.get_tracer(__name__)
-
-        # # SpanExporter receives the spans and send them to the target location
-        # exporter = AzureMonitorSpanExporter(
-        #     connection_string='InstrumentationKey=332acf1b-d364-4f16-91c3-77280b1b809f',
-        # )
-
-        # span_processor = BatchSpanProcessor(exporter)
-        # trace.get_tracer_provider().add_span_processor(span_processor)
-
-        # with tracer.start_as_current_span('hello'):
-        #     print('Hello World!')
-        
-        print( "The sample is now waiting for messages. ")
+        print("The sample is now waiting for messages. ")
 
         # Run the stdin listener in the event loop
         loop = asyncio.get_event_loop()
@@ -82,8 +91,9 @@ async def main():
         await module_client.disconnect()
 
     except Exception as e:
-        print ( "Unexpected error %s " % e )
+        print("Unexpected error %s " % e)
         raise
+
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()

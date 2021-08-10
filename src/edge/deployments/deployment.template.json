@@ -110,7 +110,8 @@
         "schemaVersion": "1.1",
         "routes": {
           "route": "FROM /messages/* INTO $upstream",
-          "mock_inference_moduleToIoTHub": "FROM /messages/modules/mock_inference_module/outputs/* INTO $upstream"
+          "mock_inference_moduleToIoTHub": "FROM /messages/modules/mock_inference_module/outputs/* INTO $upstream",
+          "SimulatedTemperatureSensorTomock_inference_module": "FROM /messages/modules/SimulatedTemperatureSensor/* INTO BrokeredEndpoint(\"/modules/mock_inference_module/inputs/input1\")"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200

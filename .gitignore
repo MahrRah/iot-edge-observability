@@ -180,3 +180,5 @@ src/edge/deployments/config/
 src/edge/deployments/config/*.json
 
 .pytest_cache
+.idea/*
+.idea
