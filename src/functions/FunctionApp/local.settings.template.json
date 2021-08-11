@@ -12,9 +12,12 @@
     "QueueName":"{{ QUEUE_NAME }}",
     "WorkspaceKey":"{{ LOG_ANALYTICS_WORKSPACE_KEY }}",
     "WorkspaceDomainSuffix":"azure.com",
+    "WorkspaceApiVersion":"2016-04-01",
     "LogType":"iotedgemodulelogs",
     "EventHubName":"test",
     "LogsIdRegex": ".*",
+    "LogsEncoding":"gzip",
+    "LogsMaxSizeMB":"20",
     "HostUrl": "{{ FUNCTION_HOST }}",
     "HostKey": "{{ FUNCTION_KEY }}"
   }
