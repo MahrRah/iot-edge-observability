@@ -1,4 +1,4 @@
-# IoT Egde Observability sample 
+# IoT Egde Observability sample
 
 | Directory        | Info           |
 | -------------    |:-------------:|
@@ -41,6 +41,7 @@ iot_hub_name = "<prefix>-iot-hub"
 ```
 
 The ssh private key key should also be stored under the generated `.ssh` directory in root.
+
 ### 2. Generate .env` file
 
 Use terraform output to generate the `.env` file
@@ -84,20 +85,30 @@ Deploy to egde device using `iotedgedev`
 iotedgedev deploy -f config/deployment.json
 ```
 
-## Logging
-This sample uses the Azure Functions from [ELMS](https://github.com/Azure-Samples/iotedge-logging-and-monitoring-solution) to export the logs into Application Insights. 
+## Observability
 
-### 1. Create `local.settings.json` 
+### Logging
+
+This sample uses the Azure Functions from [ELMS](https://github.com/Azure-Samples/iotedge-logging-and-monitoring-solution) to export the logs into Application Insights.
+
+#### 1. Create `local.settings.json`
+
 Run the command bellow to create a new `local.settings.json` with the information in the `.env` file.
 
 ```bash
 python scripts/generate_local_json.py
 ```
 
-## Metrics
+#### 2. Run Functions
+
+Run settings are defined under `.vscode/`, press `F5` to run functions.
+
+### Metrics
+
 This sample usees the Azure monitoring module to collect the metrics from all the egde modules and push them to Application Insights (see [docs](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-collect-and-transport-metrics?view=iotedge-2020-11))
 
 All metrics are expost at port `9600`.
-## Tracing
 
-> Context tracing for messaging systmes is currently not possible out of the box. 
+### Tracing
+
+> Context tracing for messaging systmes is currently not possible out of the box.
