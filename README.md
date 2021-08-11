@@ -20,11 +20,21 @@ This should result in an terraform output  containing the following values.
 
 ```bash
 Outputs:
+
+APP_INSIGHTS_CONNECTION_STRING = "<connection-string>"
+CONTAINER_NAME = "<prefix>-device-logs"
+CONTAINER_REGISTRY_PASSWORD = "<password>"                 
+CONTAINER_REGISTRY_SERVER = "<prefix>-acr.azurecr.io"
+CONTAINER_REGISTRY_USERNAME = "<prefix>-acr"
 DEVICE_CONNECTION_STRING =  "<connection-string>"
+FUNCTION_HOST = "https://<prefix>-azure-functions.azurewebsites.net"
+FUNCTION_KEY = "<key>" 
 IOTHUB_CONNECTION_STRING =  "<connection-string>"
 IOT_HUB_RESOURCE_ID = "subscriptions/<subspcription-id>/resourceGroups/<resouce-group>/providers/Microsoft.Devices/IotHubs/<prefix>-iot-hub"
 LOG_ANALYTICS_WORKSPACE_ID = "<workspace-id>"
 LOG_ANALYTICS_WORKSPACE_KEY =  "<key>"
+QUEUE_NAME = "<queue-name>"
+STORAGE_CONNECTION_STRING = "<connection-string>"
 edge_device_name = "<prefix>-edge-device"
 iot_edge_vm_public_ssh = "ssh -i ../../.ssh/id_rsa <vm-username>@<prefix>-iot-edge.westeurope.cloudapp.azure.com"
 iot_hub_name = "<prefix>-iot-hub"
@@ -36,7 +46,7 @@ The ssh private key key should also be stored under the generated `.ssh` directo
 Use terraform output to generate the `.env` file
 
 ```bash
-python generate_config.py
+python scripts/generate_config.py
 ```
 
 All `generate_config.py` options:
@@ -63,7 +73,7 @@ cd deployments/edge
 Use `iotedgedev` to generate `deployment.json` from deployment template using the `.env` file it
 
 ```bash
-`iotedgedev build -f config/deployment.json
+iotedgedev build -f config/deployment.json
 ```
 
 ### 4. Deploy
@@ -74,3 +84,20 @@ Deploy to egde device using `iotedgedev`
 iotedgedev deploy -f config/deployment.json
 ```
 
+## Logging
+This sample uses the Azure Functions from [ELMS](https://github.com/Azure-Samples/iotedge-logging-and-monitoring-solution) to export the logs into Application Insights. 
+
+### 1. Create `local.settings.json` 
+Run the command bellow to create a new `local.settings.json` with the information in the `.env` file.
+
+```bash
+python scripts/generate_local_json.py
+```
+
+## Metrics
+This sample usees the Azure monitoring module to collect the metrics from all the egde modules and push them to Application Insights (see [docs](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-collect-and-transport-metrics?view=iotedge-2020-11))
+
+All metrics are expost at port `9600`.
+## Tracing
+
+> Context tracing for messaging systmes is currently not possible out of the box. 

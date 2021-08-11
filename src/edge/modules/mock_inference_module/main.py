@@ -105,11 +105,5 @@ async def main():
 if __name__ == "__main__":
     # start metric endpoint
     start_http_server(9600, addr="0.0.0.0")
-
-    # Call Main function
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
-    loop.close()
-
-    # If using Python 3.7 or above, you can use following code instead:
-    # asyncio.run(main())
+    
+    asyncio.run(main())
