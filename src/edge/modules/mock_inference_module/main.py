@@ -17,7 +17,7 @@ from azure.monitor.opentelemetry.exporter import AzureMonitorTraceExporter
 from prometheus_client import start_http_server, Counter
 
 
-counter_pass = Counter("counter_mock_module", "Description of counter")
+counter_demo = Counter("counter_mock_module", "Demo counter for mock inferencing module")
 
 
 async def main():
@@ -56,12 +56,9 @@ async def main():
                 )  # blocking call
                 with tracer.start_as_current_span(name="parent span"):
                     parent_ctx = baggage.set_baggage("context", "parent")
-                    print("the data in the message received on input1 was ")
-                    print(input_message.data)
-                    print("custom properties are")
-                    print(input_message.custom_properties)
-                    print("forwarding mesage to output1")
-                    print("Send message upstream")
+                    print(f"message received on input1 {input_message.data} ")
+                    print(f"custom properties are {input_message.custom_properties}")
+                    print("Send message to output1")
                     with tracer.start_as_current_span(
                         name="child span", context=parent_ctx
                     ) as child_span:
@@ -69,7 +66,7 @@ async def main():
                         await module_client.send_message_to_output(
                             input_message, "output1"
                         )
-                        counter_pass.inc()
+                        counter_demo.inc()
 
         # define behavior for halting the application
         def stdin_listener():
