@@ -7,12 +7,17 @@ import os
 import sys
 import asyncio
 from six.moves import input
-import threading
+
 from azure.iot.device.aio import IoTHubModuleClient
 from opentelemetry import trace, baggage
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from azure.monitor.opentelemetry.exporter import AzureMonitorTraceExporter
+
+from prometheus_client import start_http_server, Counter
+
+
+counter_pass = Counter("counter_mock_module", "Description of counter")
 
 
 async def main():
@@ -31,11 +36,14 @@ async def main():
         await module_client.connect()
 
         try:
-            exporter = AzureMonitorTraceExporter.from_connection_string("<connection-string>")
+            connection_string = os.environ["ApplicationInsightsConnectionString"]
+            exporter = AzureMonitorTraceExporter.from_connection_string(
+                connection_string
+            )
             trace.set_tracer_provider(TracerProvider())
-            tracer = trace.get_tracer(__name__)
             span_processor = BatchSpanProcessor(exporter)
             trace.get_tracer_provider().add_span_processor(span_processor)
+            tracer = trace.get_tracer(__name__)
         except Exception as ex:
             print("Exception:")
             print(ex)
@@ -54,12 +62,14 @@ async def main():
                     print(input_message.custom_properties)
                     print("forwarding mesage to output1")
                     print("Send message upstream")
-                    with tracer.start_as_current_span(name="child span", context=parent_ctx) as child_span:
+                    with tracer.start_as_current_span(
+                        name="child span", context=parent_ctx
+                    ) as child_span:
                         child_ctx = baggage.set_baggage("context", "child")
                         await module_client.send_message_to_output(
                             input_message, "output1"
                         )
-       
+                        counter_pass.inc()
 
         # define behavior for halting the application
         def stdin_listener():
@@ -96,6 +106,10 @@ async def main():
 
 
 if __name__ == "__main__":
+    # start metric endpoint
+    start_http_server(9600, addr="0.0.0.0")
+
+    # Call Main function
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main())
     loop.close()

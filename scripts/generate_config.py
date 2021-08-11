@@ -11,12 +11,14 @@ from python_terraform import Terraform
 
 FILE_PATH = os.path.abspath(__file__)
 PROJECT_ROOT = Path(FILE_PATH).parents[1]
-DEPLOYMENT_PATH = Path(FILE_PATH).parents[1] /"src/edge/deployments"
+DEPLOYMENT_PATH = Path(FILE_PATH).parents[1] / "src/edge/deployments"
 TARGET_ENV_FILE = DEPLOYMENT_PATH / ".env"
 
 
 def load_config():
-    deployment_folder_path = f"{os.path.dirname(os.path.realpath(__file__))}/../src/edge/deployments/"
+    deployment_folder_path = (
+        f"{os.path.dirname(os.path.realpath(__file__))}/../src/edge/deployments/"
+    )
     load_dotenv(f"{deployment_folder_path}.env")
 
 
@@ -73,7 +75,7 @@ class ConfigGenerator:
         Returns terraform output for the given environment
         :returns: Dict: Key value pairs of the terraform output
         """
-        terraform_folder_path = PROJECT_ROOT / "terraform" 
+        terraform_folder_path = PROJECT_ROOT / "terraform"
 
         print(f"Getting terraform output from: {terraform_folder_path}")
 
@@ -113,7 +115,9 @@ class ConfigGenerator:
 
         if not os.environ.keys() >= env_vars:
             missing_env_vars = [k for k in env_vars if k not in os.environ]
-            print(f"Required variable(s) not set: {missing_env_vars} in default.env or as environment variables")
+            print(
+                f"Required variable(s) not set: {missing_env_vars} in default.env or as environment variables"
+            )
             print("WARNING: Aborting setting service principal info")
             return {}
 

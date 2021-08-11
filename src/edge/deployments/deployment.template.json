@@ -84,7 +84,7 @@
                 "value": "${IOT_HUB_RESOURCE_ID}"
               },
               "MetricsEndpointsCSV": {
-                "value": "http://edgeHub:9600/metrics,http://edgeAgent:9600/metrics,http://lvaExtension:9600/metrics,http://senseDemoBusinessLogic:9600/metrics"
+                "value": "http://edgeHub:9600/metrics,http://edgeAgent:9600/metrics,http://mock_inference_module:9600/"
               }
             },
             "settings": {
@@ -96,6 +96,10 @@
             "version": "1.0",
             "type": "docker",
             "status": "running",
+            "env": {
+              "ApplicationInsightsConnectionString": {
+                "value": "${APP_INSIGHTS_CONNECTION_STRING}"
+              }},
             "restartPolicy": "always",
             "settings": {
               "image": "${MODULES.mock_inference_module}",

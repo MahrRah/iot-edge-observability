@@ -11,12 +11,14 @@ from python_terraform import Terraform
 
 FILE_PATH = os.path.abspath(__file__)
 PROJECT_ROOT = Path(FILE_PATH).parents[1]
-DEPLOYMENT_PATH = Path(FILE_PATH).parents[1] /"src/functions/FunctionApp/"
-TARGET_ENV_FILE = DEPLOYMENT_PATH /"local.settings.json"
+DEPLOYMENT_PATH = Path(FILE_PATH).parents[1] / "src/functions/FunctionApp/"
+TARGET_ENV_FILE = DEPLOYMENT_PATH / "local.settings.json"
 
 
 def load_config():
-    deployment_folder_path = f"{os.path.dirname(os.path.realpath(__file__))}/../src/edge/deployments/"
+    deployment_folder_path = (
+        f"{os.path.dirname(os.path.realpath(__file__))}/../src/edge/deployments/"
+    )
     load_dotenv(f"{deployment_folder_path}.env")
 
 
@@ -60,7 +62,7 @@ class ConfigGenerator:
     def get_context(self):
         """Create the context with variables for the Jinja template"""
         output = self._get_terraform_output()
- 
+
         return output
 
     def _get_terraform_output(self):
@@ -68,12 +70,13 @@ class ConfigGenerator:
         Returns terraform output for the given environment
         :returns: Dict: Key value pairs of the terraform output
         """
-        terraform_folder_path = PROJECT_ROOT / "terraform" 
+        terraform_folder_path = PROJECT_ROOT / "terraform"
 
         print(f"Getting terraform output from: {terraform_folder_path}")
 
         tf = Terraform(working_dir=terraform_folder_path)
         return {k: v["value"] for k, v in tf.output().items()}
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

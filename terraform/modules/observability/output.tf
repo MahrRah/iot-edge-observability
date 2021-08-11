@@ -1,6 +1,10 @@
 output "application_insights_instrumentation_key" {
   value = azurerm_application_insights.default.instrumentation_key
 }
+output "application_insights_instrumentation_connection_string" {
+  value = azurerm_application_insights.default.connection_string
+}
+
 
 output "function_app_key" {
   value = data.azurerm_function_app_host_keys.example.default_function_key

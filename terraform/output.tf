@@ -54,6 +54,12 @@ output "CONTAINER_NAME" {
   value     = module.observability.storage_container_name
 }
 
+output "APP_INSIGHTS_CONNECTION_STRING" {
+  value     = module.observability.application_insights_instrumentation_connection_string
+  sensitive = true
+}
+
+
 output "CONTAINER_REGISTRY_SERVER" {
   value = azurerm_container_registry.acr.login_server
 }

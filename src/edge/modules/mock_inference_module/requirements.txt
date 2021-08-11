@@ -2,3 +2,4 @@ azure-iot-device~=2.7.0
 azure-monitor-opentelemetry-exporter==1.0.0b4
 opentelemetry-api==1.10a0
 opentelemetry-sdk==1.10a0
+prometheus-client==0.10.1
