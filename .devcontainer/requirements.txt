@@ -6,7 +6,7 @@ black==20.8b1
 isort==5.7.0
 rope==0.18.0
 # Install iotedgedev
-
+iotedgedev==2.1.6
 # Install deployment dependencies
 azure-iot-device==2.1.4
 azure-iot-hub==2.2.3
