@@ -1,4 +1,4 @@
-# IoT Egde Observability sample
+# IoT Edge Observability sample
 
 | Directory        | Info           |
 | -------------    |:-------------:|
